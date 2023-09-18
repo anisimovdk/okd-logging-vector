@@ -1,0 +1,23 @@
+repositories:
+- name: vector-operator
+  url: https://kaasops.github.io/vector-operator/helm
+- name: vector
+  url: https://helm.vector.dev
+
+releases:
+  - name: vector-operator
+    namespace: openshift-logging-vector
+    chart: vector-operator/vector-operator
+    values:
+      - values/operator.yaml.gotmpl
+      - values/agent.yaml.gotmpl
+  - name: infra-aggregator
+    chart: vector/vector
+    namespace: openshift-logging-vector
+    values:
+      - values/aggregator.yaml.gotmpl
+  - name: app-aggregator
+    chart: vector/vector
+    namespace: openshift-logging-vector
+    values:
+      - values/aggregator.yaml.gotmpl

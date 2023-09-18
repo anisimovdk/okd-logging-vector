@@ -1,0 +1,37 @@
+role: "Aggregator"
+
+image:
+  repository: timberio/vector
+  pullPolicy: IfNotPresent
+  tag: "0.31.0-debian"
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+customConfig:
+  data_dir: /vector-data-dir
+  sources:
+    vector_agents:
+      address: 0.0.0.0:9000
+      type: vector
+      version: "2"
+    internal_metrics:
+      type: internal_metrics
+  transforms: {}
+  sinks:
+    prometheus_output:
+      type: prometheus_exporter
+      inputs:
+        - internal_metrics
+      address: "[::]:9090"
+      default_namespace: aggregator
+    json_out:
+      type: console
+      inputs:
+        - vector_agents
+      target: stdout
+      encoding:
+        codec: json
